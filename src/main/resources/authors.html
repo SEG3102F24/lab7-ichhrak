@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Author Lookup</title>
+  <script>
+    function fetchAuthor() {
+      const authorId = document.getElementById("authorId").value;
+      const resultDiv = document.getElementById("result");
+
+      fetch(`/books-api/authors/${authorId}`)
+              .then(response => {
+                if (response.ok) return response.json();
+                throw new Error('Author not found');
+              })
+              .then(author => {
+                resultDiv.innerHTML = `
+                        <h3>Author Details</h3>
+                        <p>First Name: ${author.firstName}</p>
+                        <p>Last Name: ${author.lastName}</p>
+                    `;
+              })
+              .catch(error => {
+                resultDiv.innerHTML = `<p style="color: red">${error.message}</p>`;
+              });
+    }
+  </script>
+</head>
+<body>
+<nav>
+  <a href="/books-api/books">Books</a>
+  <a href="/books-api/authors.html">Authors</a>
+</nav>
+
+<h2>Find Author</h2>
+<label for="authorId">Author ID:</label>
+<input type="number" id="authorId" required>
+<button onclick="fetchAuthor()">Search</button>
+
+<div id="result"></div>
+</body>
+</html>
